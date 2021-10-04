@@ -39,7 +39,7 @@ pipeline {
                 sh 'terraform workspace select ${environment} || terraform workspace new ${environment}'
 
                 sh "terraform plan -input=false -out tfplan "
-                sh 'terraform show -no-color tfplan > tfplan.txt'
+                sh 'terraform show -no-color tfplan > tfplan01.txt'
             }
         }
         stage('Approval') {
@@ -57,7 +57,7 @@ pipeline {
 
            steps {
                script {
-                    def plan = readFile 'tfplan.txt'
+                    def plan = readFile 'tfplan01.txt'
                     input message: "Do you want to apply the plan?",
                     parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                }
